@@ -78,4 +78,10 @@ public class ProgramEvents {
 		}
 		return output.toString();
 	}
+	
+	public void getAllEvents() {
+		for (Event event : getEvents()) {
+			System.out.println(event);
+		}
+	}
 }

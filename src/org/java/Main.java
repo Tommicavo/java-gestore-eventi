@@ -84,8 +84,16 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		List<Event> events = new ArrayList<>();
 
+		List<Event> events = new ArrayList<>();
+		
+		ProgramEvents programEvents = null;
+		try {
+			programEvents = new ProgramEvents("Best Events List", events);
+		} catch (TitleException e) {
+			System.out.println("Title Error: " + e.getMessage());
+		}
+		
 		Event event = null;
 		boolean newEvent = true;
 		while (true) {
@@ -123,7 +131,7 @@ public class Main {
 			
 			try {
 				event = new Concert(title, date, totalPlaces, hour, strPrice);
-				events.add(event);
+				programEvents.addEvent(event);
 				System.out.println("Event created successfully!\n");
 				reserveTickets(event, in);
 				cancelTickets(event, in);
@@ -140,12 +148,9 @@ public class Main {
 			}
 			continue;
 		}
-
-		System.out.println("TOTAL EVENT LIST:");
-		for (Event e : events) {
-			System.out.println(e);
-			
-		}
+		
+		System.out.println("\nLIST OF ALL EVENTS:");
+		programEvents.getAllEvents();
 		
 		System.out.println("the end");
 	}
