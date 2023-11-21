@@ -46,7 +46,7 @@ public abstract class Event {
 		this.places = places;
 	}
 	
-	public void checkTitle(String title) throws TitleException{
+	private void checkTitle(String title) throws TitleException{
 		if (title == null) {
 			throw new TitleException("You must enter a title.");
 		}

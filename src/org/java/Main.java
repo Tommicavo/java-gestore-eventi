@@ -1,5 +1,7 @@
 package org.java;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.java.exceptions.DateException;
 import org.java.exceptions.HourException;
@@ -82,9 +84,11 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		Event event;
+		List<Event> events = new ArrayList<>();
+
+		Event event = null;
+		boolean newEvent = true;
 		while (true) {
-			
 			while (true) {
 				System.out.println("Do you want to create an event?");
 				System.out.println("1 - yes\n2 - no");
@@ -94,9 +98,12 @@ public class Main {
 					System.out.println("Invalid input, try again");
 					continue;
 				}
-				else if (createEvent.equals("2")) return;
-				else if (createEvent.equals("1")) break;
+				else if (createEvent.equals("2")) {
+					newEvent = false;
+					break;
+				} else if (createEvent.equals("1")) break;
 			}
+			if (!newEvent) break;
 			
 			System.out.println("Event title: ");
 			String title = in.nextLine();
@@ -116,9 +123,12 @@ public class Main {
 			
 			try {
 				event = new Concert(title, date, totalPlaces, hour, strPrice);
+				events.add(event);
 				System.out.println("Event created successfully!\n");
+				reserveTickets(event, in);
+				cancelTickets(event, in);
+				System.out.println("\nRESUME EVENT");
 				System.out.println(event);
-				break;
 			} catch (TitleException e) {
 				System.out.println("Title Error: " + e.getMessage() + '\n');
 			} catch (DateException e) {
@@ -130,12 +140,13 @@ public class Main {
 			}
 			continue;
 		}
-		
-		reserveTickets(event, in);
-		cancelTickets(event, in);
 
-		System.out.println("\nRESUME");
-		System.out.println(event);
+		System.out.println("TOTAL EVENT LIST:");
+		for (Event e : events) {
+			System.out.println(e);
+			
+		}
+		
 		System.out.println("the end");
 	}
 }
