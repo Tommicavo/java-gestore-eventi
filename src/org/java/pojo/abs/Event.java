@@ -2,7 +2,7 @@ package org.java.pojo.abs;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import java.time.format.DateTimeParseException;
 import org.java.exceptions.DateException;
 import org.java.exceptions.PlaceException;
 
@@ -13,7 +13,7 @@ public class Event {
 	private int totalPlaces;
 	private int places;
 	
-	public Event(String title, String strDate, int totalPlaces) {
+	public Event(String title, String strDate, int totalPlaces) throws DateException {
 		setTitle(title);
 		formatDate(strDate);
 		setTotalPlaces(totalPlaces);
@@ -45,10 +45,19 @@ public class Event {
 		this.places = places;
 	}
 	
-	private void formatDate(String strDate) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate date = LocalDate.parse(strDate, formatter);
-		setDate(date);
+	private void formatDate(String strDate) throws DateException {
+		LocalDate today = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		
+        try {
+            LocalDate date = LocalDate.parse(strDate, formatter);
+            setDate(date);
+        } catch (DateTimeParseException e) {
+            throw new DateException("Invalid Date Format.\nTry again using this format: dd-mm-yyyy");
+        }
+		if (getDate().isBefore(today)) {
+			throw new DateException("You can't create an event in the past.");
+		}
 	}
 	
 	private String getDateTitle() {

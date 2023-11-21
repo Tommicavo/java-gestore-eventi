@@ -1,42 +1,126 @@
 package org.java;
 
+import java.util.Scanner;
+
 import org.java.exceptions.DateException;
 import org.java.exceptions.PlaceException;
 import org.java.pojo.abs.Event;
 
 public class Main {
 	
-	public static void addPlace(Event e) {
-		try {
-			e.addPlace();
-		} catch (DateException e1) {
-			System.out.println("Date Error: " + e1);
-		} catch (PlaceException e2) {
-			System.out.println("Places Error: " + e2);
+	public static void reserveTickets(Event event, Scanner in) {
+		int newTickets = 0;
+		while (true) {
+			System.out.println("Do you want to reserve some tickets?");
+			System.out.println("1 - yes\n2 - no");
+			String ticketsToBuy = in.nextLine();
+			
+			if (!ticketsToBuy.equals("1") && !ticketsToBuy.equals("2")) {
+				System.out.println("Invalid input, try again");
+				continue;
+			}
+			else if (ticketsToBuy.equals("1")) {
+				System.out.println("How many tickets you want to buy?");
+				newTickets = Integer.valueOf(in.nextLine());
+			}
+			break;
 		}
+		
+		if (newTickets > 0) {
+			int boughtTickets = 0;
+			for (int i = 0; i < newTickets; i++) {
+				try {
+					event.addPlace();
+					boughtTickets++;
+				} catch (DateException e1) {
+					System.out.println("Date Error: " + e1);
+				} catch (PlaceException e2) {
+					System.out.println("Places Error: " + e2);
+				}
+			}
+			System.out.println("You bought " + boughtTickets + " tickets!");
+		}
+		
 	}
 	
-	public static void subPlace(Event e) {
-		try {
-			e.subPlace();
-		} catch (DateException e1) {
-			System.out.println("Date Error: " + e1);
-		} catch (PlaceException e2) {
-			System.out.println("Places Error: " + e2);
+	public static void cancelTickets(Event event, Scanner in) {
+		int lessTickets = 0;
+		while (true) {
+			System.out.println("Do you want to cancel some tickets?");
+			System.out.println("1 - yes\n2 - no");
+			String ticketsToCancel = in.nextLine();
+			
+			if (!ticketsToCancel.equals("1") && !ticketsToCancel.equals("2")) {
+				System.out.println("Invalid input, try again");
+				continue;
+			}
+			else if (ticketsToCancel.equals("1")) {
+				System.out.println("How many tickets you want to cancel?");
+				lessTickets = Integer.valueOf(in.nextLine());
+			}
+			break;
+		}
+		
+		if (lessTickets > 0) {
+			int canceledTickets = 0;
+			for (int i = 0; i < lessTickets; i++) {
+				try {
+					event.subPlace();
+					canceledTickets++;
+				} catch (DateException e1) {
+					System.out.println("Date Error: " + e1);
+				} catch (PlaceException e2) {
+					System.out.println("Places Error: " + e2);
+				}
+			}
+			System.out.println("You canceled " + canceledTickets + " tickets!");
 		}
 	}
 	
 	public static void main(String[] args) {
-		Event e = new Event("Titolo evento", "30/11/2023", 1);
-		System.out.println(e);
+		Scanner in = new Scanner(System.in);
+		Event event;
+		while (true) {
+			
+			while (true) {
+				System.out.println("Do you want to create an event?");
+				System.out.println("1 - yes\n2 - no");
+				String createEvent = in.nextLine();
+				
+				if (!createEvent.equals("1") && !createEvent.equals("2")) {
+					System.out.println("Invalid input, try again");
+					continue;
+				}
+				else if (createEvent.equals("2")) return;
+				else if (createEvent.equals("1")) break;
+			}
+			
+			System.out.println("Event title: ");
+			String title = in.nextLine();
+			
+			System.out.println("Event date: ");
+			System.out.println("(Write date in this format: dd-mm-yyyy)");
+			String date = in.nextLine();
+			
+			System.out.println("Event total places: ");
+			int totalPlaces = Integer.valueOf(in.nextLine());
+			
+			try {
+				event = new Event(title, date, totalPlaces);
+				System.out.println("Event created successfully!\n");
+				System.out.println(event);
+				break;
+			} catch (DateException e) {
+				System.out.println("Date Error: " + e.getMessage() + '\n');
+				continue;
+			}	
+		}
 		
-		addPlace(e);
-		System.out.println(e);
-		
-		subPlace(e);
-		System.out.println(e);
-		
-		subPlace(e);
-		System.out.println(e);	
+		reserveTickets(event, in);
+		cancelTickets(event, in);
+
+		System.out.println("\nRESUME");
+		System.out.println(event);
+		System.out.println("the end");
 	}
 }
