@@ -5,16 +5,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import org.java.exceptions.DateException;
 import org.java.exceptions.PlaceException;
+import org.java.exceptions.TitleException;
 
-public class Event {
+public abstract class Event {
 	
 	private String title;
 	private LocalDate date;
 	private int totalPlaces;
 	private int places;
 	
-	public Event(String title, String strDate, int totalPlaces) throws DateException {
-		setTitle(title);
+	public Event(String title, String strDate, int totalPlaces) throws DateException, TitleException {
+		checkTitle(title);
 		formatDate(strDate);
 		setTotalPlaces(totalPlaces);
 		setPlaces(0);
@@ -43,6 +44,13 @@ public class Event {
 	}
 	private void setPlaces(int places) {
 		this.places = places;
+	}
+	
+	public void checkTitle(String title) throws TitleException{
+		if (title == null) {
+			throw new TitleException("You must enter a title.");
+		}
+		setTitle(title);
 	}
 	
 	private void formatDate(String strDate) throws DateException {
@@ -91,6 +99,6 @@ public class Event {
 		return 
 				getDateTitle() + '\n' +
 				"Total places: " + getTotalPlaces() + '\n' +
-				"Places: " + getPlaces() + "\n\n"; 
+				"Places: " + getPlaces(); 
 	}
 }

@@ -1,9 +1,12 @@
 package org.java;
 
 import java.util.Scanner;
-
 import org.java.exceptions.DateException;
+import org.java.exceptions.HourException;
 import org.java.exceptions.PlaceException;
+import org.java.exceptions.PriceException;
+import org.java.exceptions.TitleException;
+import org.java.pojo.Concert;
 import org.java.pojo.abs.Event;
 
 public class Main {
@@ -32,10 +35,10 @@ public class Main {
 				try {
 					event.addPlace();
 					boughtTickets++;
-				} catch (DateException e1) {
-					System.out.println("Date Error: " + e1);
-				} catch (PlaceException e2) {
-					System.out.println("Places Error: " + e2);
+				} catch (DateException e) {
+					System.out.println("Date Error: " + e);
+				} catch (PlaceException e) {
+					System.out.println("Places Error: " + e);
 				}
 			}
 			System.out.println("You bought " + boughtTickets + " tickets!");
@@ -67,10 +70,10 @@ public class Main {
 				try {
 					event.subPlace();
 					canceledTickets++;
-				} catch (DateException e1) {
-					System.out.println("Date Error: " + e1);
-				} catch (PlaceException e2) {
-					System.out.println("Places Error: " + e2);
+				} catch (DateException e) {
+					System.out.println("Date Error: " + e);
+				} catch (PlaceException e) {
+					System.out.println("Places Error: " + e);
 				}
 			}
 			System.out.println("You canceled " + canceledTickets + " tickets!");
@@ -102,18 +105,30 @@ public class Main {
 			System.out.println("(Write date in this format: dd-mm-yyyy)");
 			String date = in.nextLine();
 			
+			System.out.println("Event hour: ");
+			String hour = in.nextLine();
+			
 			System.out.println("Event total places: ");
 			int totalPlaces = Integer.valueOf(in.nextLine());
 			
+			System.out.println("Ticket price: ");
+			String strPrice = in.nextLine();
+			
 			try {
-				event = new Event(title, date, totalPlaces);
+				event = new Concert(title, date, totalPlaces, hour, strPrice);
 				System.out.println("Event created successfully!\n");
 				System.out.println(event);
 				break;
+			} catch (TitleException e) {
+				System.out.println("Title Error: " + e.getMessage() + '\n');
 			} catch (DateException e) {
 				System.out.println("Date Error: " + e.getMessage() + '\n');
-				continue;
-			}	
+			} catch (HourException e) {
+				System.out.println("Hour Error: " + e.getMessage() + '\n');
+			} catch (PriceException e) {
+				System.out.println("Price Error: " + e.getMessage() + '\n');
+			}
+			continue;
 		}
 		
 		reserveTickets(event, in);
